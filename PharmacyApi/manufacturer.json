@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "Name": "Interfax"
+  },
+  {
+    "id": 2,
+    "Name": "Pharmstandard"
+  },
+  {
+    "id": 3,
+    "Name": "NPO Materia Me"
+  },
+  {
+    "id": 4,
+    "Name": "Reckitt Benckise"
+  },
+  {
+    "id": 5,
+    "Name": "GlaxoSmithKline"
+  },
+  {
+    "id": 6,
+    "Name": "Novartis"
+  },
+  {
+    "id": 7,
+    "Name": "Sanofi"
+  },
+  {
+    "id": 8,
+    "Name": "Sandoz"
+  },
+  {
+    "id": 9,
+    "Name": "Bayer AG"
+  },
+  {
+    "id": 10,
+    "Name": "Schering-Plough"
+  },
+  {
+    "id": 11,
+    "Name": "AstraZeneca"
+  },
+  {
+    "id": 12,
+    "Name": "Berlin-Chemie"
+  },
+  {
+    "id": 13,
+    "Name": "Egis Pharmaceut"
+  },
+  {
+    "id": 14,
+    "Name": "Lek Pharmaceuti"
+  },
+  {
+    "id": 15,
+    "Name": "Krewel Meuselba"
+  }
+]

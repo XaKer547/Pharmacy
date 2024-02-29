@@ -14,5 +14,6 @@ namespace PharmacyApi.Data
         public DbSet<Medicine> Medicines { get; set; }
         public DbSet<Manufacturer> Manufacturers { get; set; }
         public DbSet<TradeName> TradeNames { get; set; }
+        public DbSet<IssueRequest> IssueRequests { get; set; }
     }
 }

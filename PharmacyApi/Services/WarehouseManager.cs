@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PharmacyApi.Data;
+using PharmacyApi.Services.Interfaces;
 
-namespace PharmacyApi.Services.Interfaces
+namespace PharmacyApi.Services
 {
     public class WarehouseManager : IWarehouseManager
     {

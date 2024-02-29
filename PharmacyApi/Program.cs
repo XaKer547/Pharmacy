@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PharmacyApi.Data;
-using PharmacyApi.Data.Entities.Seeder;
+using PharmacyApi.Data.Seeder;
 using PharmacyApi.Services;
 using PharmacyApi.Services.Interfaces;
 
@@ -18,13 +18,17 @@ namespace PharmacyApi
 
             builder.Services.AddDbContext<PharmacyDbContext>(opt =>
             {
-                opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                opt.UseSqlite(builder.Configuration.GetConnectionString("SqliteConnection"));
             });
 
             builder.Services.AddScoped<IMedicineManager, MedicineManager>();
             builder.Services.AddScoped<IMedicineService, MedicineService>();
+
             builder.Services.AddScoped<IWarehouseManager, WarehouseManager>();
             builder.Services.AddScoped<IWarehouseService, WarehouseService>();
+
+            builder.Services.AddScoped<IIssueRequestService, IssueRequestService>();
+            builder.Services.AddScoped<IIssueRequestManager, IssueRequestManager>();
 
             var app = builder.Build();
 
