@@ -9,16 +9,16 @@ namespace PharmacyApi.Controllers
     [Route("[controller]")]
     public class MedicinesController : ControllerBase
     {
-        private readonly IMedicineService _mediicineService;
-        private readonly IMedicineManager _mediicineManager;
+        private readonly IMedicineService _medicineService;
+        private readonly IMedicineManager _medicineManager;
         private readonly IWarehouseManager _warehouseManager;
         private readonly IIssueRequestManager _issueRequestManager;
         private readonly IIssueRequestService _issueRequestService;
         public MedicinesController(IWarehouseManager warehouseManager, IMedicineManager mediicineManager, IMedicineService mediicineService, IIssueRequestManager issueRequestManager, IIssueRequestService issueRequestService)
         {
             _warehouseManager = warehouseManager;
-            _mediicineManager = mediicineManager;
-            _mediicineService = mediicineService;
+            _medicineManager = mediicineManager;
+            _medicineService = mediicineService;
             _issueRequestManager = issueRequestManager;
             _issueRequestService = issueRequestService;
         }
@@ -26,13 +26,13 @@ namespace PharmacyApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetMedicines(int warehouseId)
         {
-            return Ok(await _mediicineService.GetMedicinesAsync(warehouseId));
+            return Ok(await _medicineService.GetMedicinesAsync(warehouseId));
         }
 
         [HttpGet("RunningOut")]
         public async Task<IActionResult> GetRunningOutMedicines()
         {
-            return Ok(await _mediicineService.GetRunningOutMedicinesAsync());
+            return Ok(await _medicineService.GetRunningOutMedicinesAsync());
         }
 
         [HttpPost("Invoice")]
@@ -41,7 +41,7 @@ namespace PharmacyApi.Controllers
             if (medicineInvoice.Medicines.Any(m => m.ExpirationDate < DateTime.Now))
                 return BadRequest("Невозможно принять счет, так как в списке встречаются просроченные препараты");
 
-            await _mediicineService.CreateIssueRequestAsync(medicineInvoice);
+            await _issueRequestService.CreateIssueRequestAsync(medicineInvoice);
 
             return Ok();
         }
@@ -55,17 +55,17 @@ namespace PharmacyApi.Controllers
             if (writeoff.Quantity <= 0)
                 return BadRequest("На остатке меньшее количество, чем вы пытаетесь списать");
 
-            var exists = await _mediicineManager.Exists(writeoff.MedicineId);
+            var exists = await _medicineManager.Exists(writeoff.MedicineId);
 
             if (!exists)
                 return BadRequest("Медицинский препарат с указанным ID не найден");
 
-            var canWriteoff = await _mediicineManager.CanWriteOff(writeoff.MedicineId, writeoff.Quantity);
+            var canWriteoff = await _medicineManager.CanWriteOff(writeoff.MedicineId, writeoff.Quantity);
 
             if (!canWriteoff)
                 return BadRequest("На остатке меньшее количество, чем вы пытаетесь списать");
 
-            await _mediicineService.WriteOffAsync(writeoff);
+            await _medicineService.WriteOffAsync(writeoff);
 
             return Ok();
         }
@@ -78,12 +78,12 @@ namespace PharmacyApi.Controllers
             if (!exists)
                 return NotFound("Склад назначения с указанным Id не найден");
 
-            var hostWarehouse = await _mediicineManager.GetHostWarehouse(medicineId);
+            var hostWarehouse = await _medicineManager.GetHostWarehouse(medicineId);
 
             if (hostWarehouse == destinationWarehouseId)
                 return BadRequest("Склад назначения совпадает с текущим складом");
 
-            await _mediicineService.TransferAsync(new MedicineTransferDTO()
+            await _medicineService.TransferAsync(new MedicineTransferDTO()
             {
                 MedicineId = medicineId,
                 WarehouesId = destinationWarehouseId,
