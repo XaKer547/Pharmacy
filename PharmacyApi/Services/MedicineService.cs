@@ -51,7 +51,7 @@ namespace PharmacyApi.Services
             await _context.SaveChangesAsync();
         }
 
-        public Task WriteOffAsync(MedicineWriteoff writeoff)
+        public async Task WriteOffAsync(MedicineWriteoff writeoff)
         {
             var medicine = _context.Medicines.SingleOrDefault(m => m.Id == writeoff.MedicineId);
 

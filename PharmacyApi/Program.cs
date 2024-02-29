@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PharmacyApi.Data;
+using PharmacyApi.Data.Entities.Seeder;
 using PharmacyApi.Services;
 using PharmacyApi.Services.Interfaces;
 
@@ -15,23 +16,10 @@ namespace PharmacyApi
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            #region DbContext
-
-            builder.Services.AddDbContextPool<PharmacyDbContext>(opt =>
+            builder.Services.AddDbContext<PharmacyDbContext>(opt =>
             {
-                opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaulConnectinon"));
+                opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
-
-            builder.Services.AddScoped<TenantRequest>();
-
-            builder.Services.AddScoped<PharmacyDbContext>();
-
-            builder.Services.AddScoped(serviceProvider =>
-            {
-                var pooledFactory = serviceProvider.GetRequiredService<PharmacyDbContextFactory>();
-                return pooledFactory.CreateDbContext();
-            });
-            #endregion
 
             builder.Services.AddScoped<IMedicineManager, MedicineManager>();
             builder.Services.AddScoped<IMedicineService, MedicineService>();
@@ -50,8 +38,16 @@ namespace PharmacyApi
 
             app.UseAuthorization();
 
-
             app.MapControllers();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetService<PharmacyDbContext>();
+
+                var seeder = new DbSeeder();
+
+                seeder.SeedAll(context);
+            }
 
             app.Run();
         }

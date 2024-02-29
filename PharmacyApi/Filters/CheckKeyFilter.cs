@@ -16,9 +16,7 @@ namespace PharmacyApi.Filters
         }
 
         public CheckKeyFilter()
-        {
-
-        }
+        { }
 
         private readonly Regex _regex = new(@"competitor_\d+");
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
